@@ -6,8 +6,9 @@ on:
   push:
     branches:
       - main
+      - split-ci-builds
     paths:
-      - "ic-dev/Dockerfile"
+      - "ic-dev-full/**"
 
   workflow_run:
     workflows: [rust_dfx_base_image, ic_binaries]
@@ -49,14 +50,14 @@ jobs:
       - name: "Full image"
         uses: docker/build-push-action@v2
         with:
-          push: true
-          context: ./ic-dev
+          # push: true
+          push: false
+          context: ./ic-dev-full
           build-args: |
             BASE_IMAGE=ghcr.io/${{ github.repository_owner }}/ic-dev-base:latest
-            IC_BIN_IMAGE=ghcr.io/${{ github.repository_owner }}/ic-bin:latest
+            BIN_IMAGE=ghcr.io/${{ github.repository_owner }}/ic-bin:latest
           tags: |
             ghcr.io/${{ github.repository_owner }}/ic-dev-full:latest
             ghcr.io/${{ github.repository_owner }}/ic-dev-full:${{ env.BUILD_TAG }}
             us-central1-docker.pkg.dev/dfx-server/ci/ic-dev-full:latest
             us-central1-docker.pkg.dev/dfx-server/ci/ic-dev-full:${{ env.BUILD_TAG }}
-          target: full

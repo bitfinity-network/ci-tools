@@ -6,8 +6,9 @@ on:
   push:
     branches:
       - main
+      - split-ci-builds
     paths:
-      - "ic-dev/Dockerfile"
+      - "ic-bin/**"
 
 env:
   BUILD_TAG: latest
@@ -43,8 +44,9 @@ jobs:
       - name: Building Dfinity nns tool and canisters wasms
         uses: docker/build-push-action@v2
         with:
-          push: true
-          context: ./ic-dev
+          # push: true
+          push: false
+          context: ./ic-bin
           build-args: |
             IC_BUILD_BRANCH=rebased-2022-02-17
             BASE_IMAGE=ghcr.io/${{ github.repository_owner }}/ic-dev-base:latest
@@ -53,4 +55,3 @@ jobs:
             ghcr.io/${{ github.repository_owner }}/ic-bin:${{ env.BUILD_TAG }}
             us-central1-docker.pkg.dev/dfx-server/ci/ic-bin:latest
             us-central1-docker.pkg.dev/dfx-server/ci/ic-bin:${{ env.BUILD_TAG }}
-          target: ic_bin

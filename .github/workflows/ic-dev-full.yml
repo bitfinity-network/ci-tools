@@ -16,7 +16,7 @@ on:
       - completed
 
 env:
-  BUILD_TAG: latest
+  BUILD_TAG: rust1.60-dfx0.9
 
 jobs:
   ic-full-image:
@@ -54,7 +54,7 @@ jobs:
           push: false
           context: ./ic-dev-full
           build-args: |
-            BASE_IMAGE=ghcr.io/${{ github.repository_owner }}/ic-dev-base:latest
+            BASE_IMAGE=ghcr.io/${{ github.repository_owner }}/ic-dev-base:rust1.60-dfx0.9
             BIN_IMAGE=ghcr.io/${{ github.repository_owner }}/ic-bin:latest
           tags: |
             ghcr.io/${{ github.repository_owner }}/ic-dev-full:latest

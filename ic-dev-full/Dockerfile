@@ -14,20 +14,21 @@ ENV PUBLIC_DIR=/workspace/static
 
 WORKDIR $WORK_DIR
 
-RUN mkdir $DFX_WASMS_DIR && mkdir $DFX_DID_DIR 
+RUN mkdir -p $DFX_WASMS_DIR $DFX_DID_DIR $PUBLIC_DIR
     
 COPY neurons/* ${DFX_NEURONS_DIR}/
 COPY dfx.json ${WORK_DIR}
 COPY bin/* /usr/local/bin/
-COPY --chown=root:root nginx.conf /etc/nginx/nginx.conf
 
 # Pack external binaries
 COPY --from=ic_bin --chown=root:root /ic/wasm $WORK_DIR/wasm
 COPY --from=ic_bin --chown=root:root /ic/bin/* /usr/local/bin/
 
-RUN apt-get update && \
-    apt-get -y install nginx && \
-    apt-get clean && rm -rf /var/lib/apt/lists/*
+# NGINX
+RUN apt-get update
+RUN echo "Y" | apt-get -y install nginx-light
+RUN apt-get clean && rm -rf /var/lib/apt/lists/*
+COPY --chown=root:root nginx.conf /etc/nginx/nginx.conf
 
 RUN cd $DFX_WASMS_DIR && curl -SsO https://storage.googleapis.com/dfx-server_ic/testnet/wasm/ledger-canister-min.wasm && \
     cd $DFX_DID_DIR && curl -SsO https://storage.googleapis.com/dfx-server_ic/testnet/candid/ledger-min.did
@@ -49,4 +50,4 @@ RUN chmod -R 0777 ./ && \
 
 EXPOSE 8000
 
-CMD dfx start --host $IC_HOST
+CMD (dfx start --host $IC_HOST --background && nginx)

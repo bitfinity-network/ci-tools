@@ -7,7 +7,7 @@ on:
     branches:
       - main
     paths:
-      - "ic-dev/Dockerfile"
+      - "ic-dev-full/**"
 
   workflow_run:
     workflows: [rust_dfx_base_image, ic_binaries]
@@ -15,7 +15,8 @@ on:
       - completed
 
 env:
-  BUILD_TAG: latest
+  # Should be the same as in the base image
+  BUILD_TAG: rust1.62-dfx0.9
 
 jobs:
   ic-full-image:
@@ -50,13 +51,12 @@ jobs:
         uses: docker/build-push-action@v2
         with:
           push: true
-          context: ./ic-dev
+          context: ./ic-dev-full
           build-args: |
-            BASE_IMAGE=ghcr.io/${{ github.repository_owner }}/ic-dev-base:latest
-            IC_BIN_IMAGE=ghcr.io/${{ github.repository_owner }}/ic-bin:latest
+            BASE_IMAGE=ghcr.io/${{ github.repository_owner }}/ic-dev-base:${{ env.BUILD_TAG }}
+            BIN_IMAGE=ghcr.io/${{ github.repository_owner }}/ic-bin:latest
           tags: |
             ghcr.io/${{ github.repository_owner }}/ic-dev-full:latest
             ghcr.io/${{ github.repository_owner }}/ic-dev-full:${{ env.BUILD_TAG }}
             us-central1-docker.pkg.dev/dfx-server/ci/ic-dev-full:latest
             us-central1-docker.pkg.dev/dfx-server/ci/ic-dev-full:${{ env.BUILD_TAG }}
-          target: full

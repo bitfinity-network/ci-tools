@@ -1,4 +1,10 @@
 {
+    "version": 1,
+    "defaults":{
+        "replica": {
+            "subnet_type":"system"
+        }
+    },
     "canisters": {
     },
     "networks": {
@@ -6,6 +12,5 @@
             "bind": "0.0.0.0:8000",
             "type": "ephemeral"
         }
-    },
-    "version": 1
+    }
 }

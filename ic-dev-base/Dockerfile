@@ -7,7 +7,7 @@ ENV HOME=/workspace
 WORKDIR $WORK_DIR
 # Dfinity SDK
 ARG motoko_version=0.6.29
-ARG dfx_version=0.9.3
+ARG dfx_version=0.11.1-beta.3
 ARG DFX_DEV_IDENTITY=ic_dev_identity
 ARG DFX_DEV_ACCOUNT_IDENTITY=ic_dev_account
 
@@ -31,8 +31,8 @@ RUN curl -fsSL https://github.com/dfinity/motoko/releases/download/${motoko_vers
     
 RUN DFX_VERSION=${dfx_version} sh -ci "$(curl -fsSL https://sdk.dfinity.org/install.sh)"
 
-RUN dfx identity new $DFX_DEV_ACCOUNT_IDENTITY && \
-    dfx identity new $DFX_DEV_IDENTITY && \
+RUN dfx identity new --disable-encryption $DFX_DEV_ACCOUNT_IDENTITY && \
+    dfx identity new --disable-encryption $DFX_DEV_IDENTITY && \
     dfx identity use $DFX_DEV_IDENTITY
 
 RUN rm -rf $CARGO_HOME/registry && \

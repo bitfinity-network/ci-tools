@@ -16,7 +16,7 @@ on:
 
 env:
   # Should be the same as in the base image
-  BUILD_TAG: rust1.62-dfx0.9
+  BUILD_TAG: rust1.62-dfx0.11
 
 jobs:
   ic-full-image:

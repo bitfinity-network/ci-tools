@@ -6,12 +6,11 @@ on:
   push:
     branches:
       - main
-      - split-ci-builds
     paths:
       - "ic-dev-base/**"
 
 env:
-  BUILD_TAG: rust1.62-dfx0.9
+  BUILD_TAG: rust1.62-dfx0.11
 
 jobs:
   ic-dev-base-image:

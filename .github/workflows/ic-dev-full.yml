@@ -8,6 +8,11 @@ on:
       - main
     paths:
       - "ic-dev-full/**"
+  pull_request:
+    branches:
+      - 'main'
+    # paths:
+    #   - "ic-dev-full/**"
 
   workflow_run:
     workflows: [rust_dfx_base_image, ic_binaries]
@@ -17,6 +22,9 @@ on:
 env:
   # Should be the same as in the base image
   BUILD_TAG: rust1.62-dfx0.11
+  # BIN_IMAGE: ghcr.io/${{ github.repository_owner }}/ic-bin:latest
+  # Revert to previously builded image, hope it will fix pipeline
+  BIN_IMAGE: 'ghcr.io/${{ github.repository_owner }}/ic-bin@sha256:610e633cb594059606ac264d5c4dc8425c6a740583d867fc0a6a6e92a8229966'
 
 jobs:
   ic-full-image:
@@ -50,11 +58,11 @@ jobs:
       - name: "Full image"
         uses: docker/build-push-action@v2
         with:
-          push: true
+          push-image: ${{ (github.event_name != 'pull_request' && github.ref == 'refs/heads/main') ||  github.ref_type == 'tag' }}
           context: ./ic-dev-full
           build-args: |
             BASE_IMAGE=ghcr.io/${{ github.repository_owner }}/ic-dev-base:${{ env.BUILD_TAG }}
-            BIN_IMAGE=ghcr.io/${{ github.repository_owner }}/ic-bin:latest
+            BIN_IMAGE=${{ env.BIN_IMAGE }}
           tags: |
             ghcr.io/${{ github.repository_owner }}/ic-dev-full:latest
             ghcr.io/${{ github.repository_owner }}/ic-dev-full:${{ env.BUILD_TAG }}

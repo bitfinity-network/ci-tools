@@ -11,8 +11,8 @@ on:
   pull_request:
     branches:
       - "main"
-    # paths:
-    #   - "ic-dev-full/**"
+    paths:
+      - "ic-dev-full/**"
 
   workflow_run:
     workflows: [rust_dfx_base_image, ic_binaries]

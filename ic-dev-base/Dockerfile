@@ -22,6 +22,7 @@ RUN apt-get update && \
     python3 -m pip install --upgrade pip
     
 RUN cargo install ic-cdk-optimizer && \
+    cargo install cargo-audit && \
     rustup component add clippy rustfmt && \
     rustup target add wasm32-unknown-unknown
 

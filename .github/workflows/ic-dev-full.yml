@@ -16,8 +16,8 @@ on:
 
   workflow_run:
     workflows: [rust_dfx_base_image, ic_binaries]
-    types:
-      - completed
+    types: [completed]
+    branches: [main]
 
 env:
   # Should be the same as in the base image
@@ -28,7 +28,7 @@ env:
 
 jobs:
   ic-full-image:
-    if: ${{ ! github.event.workflow_run || github.event.workflow_run.conclusion == 'success' }}
+    if: ${{ ! github.event.workflow_run || (github.event.workflow_run.conclusion == 'success') }}
     runs-on: ubuntu-latest
 
     steps:

@@ -24,10 +24,9 @@ RUN apt-get update && \
 RUN rustup component add clippy rustfmt && \
     rustup target add wasm32-unknown-unknown && \
     rustup component add llvm-tools-preview && \
-    rustup default stable && \
     cargo install ic-cdk-optimizer && \
     cargo install cargo-audit && \
-    cargo +stable install cargo-llvm-cov && \
+    cargo install cargo-llvm-cov && \
     cargo install grcov
 
 # RUN curl -fsSL https://download.dfinity.systems/motoko/${motoko_version}/x86_64-linux/motoko-${motoko_version}.tar.gz | tar -xz -C /opt/bin && chmod +x /opt/bin/moc

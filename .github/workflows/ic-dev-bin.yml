@@ -8,6 +8,11 @@ on:
       - main
     paths:
       - "ic-bin/**"
+  pull_request:
+    branches:
+      - "main"
+    paths:
+      - "ic-bin/**"
 
 env:
   BUILD_TAG: latest

@@ -15,7 +15,7 @@ on:
       - "ic-dev-base/**"
 
 env:
-  BUILD_TAG: rust1.62-dfx0.11
+  BUILD_TAG: rust1.64-dfx0.11.2
 
 jobs:
   ic-dev-base-image:

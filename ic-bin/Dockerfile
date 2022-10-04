@@ -27,7 +27,7 @@ RUN ls ${IC_RS_WD}/target/release && \
 # Building  NNS canisters
 RUN cd ic && \
     cat ./gitlab-ci/src/requirements.txt | grep -v PyYAML > requirements.txt && \
-    pip install -r  requirements.txt && \
+    pip install -r requirements.txt && \
     sed -i 's/_check_canisters_size(artifacts_dir=default_artifacts_dir)/_check_canisters_size(artifacts_dir)/g' ./gitlab-ci/src/job_scripts/cargo_build_canisters.py && \
     python3 ./gitlab-ci/tools/job-driver.py cargo-build-canisters "${ARTIFACTS_DIR}"
 

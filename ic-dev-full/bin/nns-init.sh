@@ -18,7 +18,8 @@ ic-nns-init --url $IC_URI \
 --wasm-dir $DFX_WASMS_DIR \
 --initial-neurons ~/initial-neurons.csv \
 --initialize-ledger-with-test-accounts-for-principals $principal \
---minter $minter
+#--minter $minter
+# Minter arg was intoduced with our patches for the IC
 
 deploy_status=$?
 

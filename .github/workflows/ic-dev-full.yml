@@ -1,5 +1,9 @@
 name: ic_dev_full_image
 
+concurrency: 
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 on:
   workflow_dispatch:
     # Just run it
@@ -18,13 +22,10 @@ on:
     workflows: [rust_dfx_base_image, ic_binaries]
     types: [completed]
     branches: [main]
-
 env:
-  # Should be the same as in the base image
-  BUILD_TAG: rust1.62-dfx0.11
-  # BIN_IMAGE: ghcr.io/${{ github.repository_owner }}/ic-bin:latest
-  # Revert to previously builded image, hope it will fix pipeline
-  BIN_IMAGE: "ghcr.io/${{ github.repository_owner }}/ic-bin@sha256:610e633cb594059606ac264d5c4dc8425c6a740583d867fc0a6a6e92a8229966"
+  BUILD_TAG: rust1.64-dfx0.11-rc-2022-09-30
+  BASE_IMAGE: ghcr.io/${{ github.repository_owner }}/ic-dev-base:rust1.64-dfx0.11.2
+  BIN_IMAGE: ghcr.io/${{ github.repository_owner }}/ic-bin:rc-2022-09-30
 
 jobs:
   ic-full-image:
@@ -61,7 +62,7 @@ jobs:
           push: ${{ (github.event_name != 'pull_request' && github.ref == 'refs/heads/main') ||  github.ref_type == 'tag' }}
           context: ./ic-dev-full
           build-args: |
-            BASE_IMAGE=ghcr.io/${{ github.repository_owner }}/ic-dev-base:${{ env.BUILD_TAG }}
+            BASE_IMAGE=${{ env.BASE_IMAGE }}
             BIN_IMAGE=${{ env.BIN_IMAGE }}
           tags: |
             ghcr.io/${{ github.repository_owner }}/ic-dev-full:latest

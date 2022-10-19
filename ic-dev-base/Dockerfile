@@ -14,7 +14,7 @@ ARG DFX_DEV_ACCOUNT_IDENTITY=ic_dev_account
 ENV DFX_DEV_IDENTITY=${DFX_DEV_IDENTITY}
 ENV DFX_DEV_ACCOUNT_IDENTITY=${DFX_DEV_ACCOUNT_IDENTITY}
 
-COPY identities ./
+COPY identities ./identities
 
 RUN apt-get update && \
     apt-get -y full-upgrade && \

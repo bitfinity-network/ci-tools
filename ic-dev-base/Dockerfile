@@ -1,4 +1,4 @@
-FROM rust:1.64-slim-bullseye as base
+FROM rust:1.65-slim-bullseye as base
 
 ENV DEBIAN_FRONTEND=noninteractive
 ENV WORK_DIR=/workspace

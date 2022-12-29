@@ -1,4 +1,4 @@
-FROM rust:1.65-slim-bullseye as base
+FROM rust:1.66-slim-bullseye as base
 
 ENV DEBIAN_FRONTEND=noninteractive
 ENV WORK_DIR=/workspace
@@ -26,7 +26,7 @@ RUN apt-get update && \
     rustup component add clippy rustfmt && \
     rustup target add wasm32-unknown-unknown && \
     rustup component add llvm-tools-preview && \
-    cargo install ic-cdk-optimizer && \
+    cargo install ic-wasm && \
     cargo install cargo-audit && \
     cargo install cargo-llvm-cov && \
     cargo install grcov && \

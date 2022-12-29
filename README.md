@@ -7,7 +7,7 @@ It contains:
 
 * rust, cargo, clippy, etc.
 * DFX with Motoko
-* ic_cdk_optimizer
+* ic-wasm
 * python3
 * `jq` to modify json files easily
 

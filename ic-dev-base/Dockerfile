@@ -16,27 +16,28 @@ ENV DFX_DEV_ACCOUNT_IDENTITY=${DFX_DEV_ACCOUNT_IDENTITY}
 
 COPY identities ./identities
 
-RUN apt-get update && \
-    apt-get -y full-upgrade && \
-    apt-get install -y pkg-config curl git gzip tar pigz build-essential cmake \ 
-    libssl-dev clang liblmdb-dev libunwind-dev csvkit jq python3 pipenv lcov && \
-    apt-get clean && rm -rf /var/lib/apt/lists/* && \
-    python3 -m pip install --upgrade pip && \
-    # install rust & related toolchain
-    rustup component add clippy rustfmt && \
-    rustup target add wasm32-unknown-unknown && \
-    rustup component add llvm-tools-preview && \
-    cargo install ic-wasm && \
-    cargo install cargo-audit && \
-    cargo install cargo-llvm-cov && \
-    cargo install grcov && \
-    # install motoko & quill
-    curl -fsSL https://github.com/dfinity/motoko/releases/download/${motoko_version}/motoko-linux64-${motoko_version}.tar.gz \
+RUN apt-get update && apt-get -y full-upgrade \
+    && apt-get install -y pkg-config curl git gzip tar pigz build-essential cmake \ 
+    libssl-dev clang liblmdb-dev libunwind-dev csvkit jq python3 pipenv lcov \
+    && apt-get clean && rm -rf /var/lib/apt/lists/* \
+    && python3 -m pip install --upgrade pip
+
+# install rust & related toolchain
+RUN rustup component add clippy rustfmt \
+    && rustup target add wasm32-unknown-unknown \
+    && rustup component add llvm-tools-preview \
+    && cargo install ic-wasm cargo-audit cargo-llvm-cov grcov
+
+RUN curl -L https://foundry.paradigm.xyz | bash
+
+# install motoko & quill
+RUN curl -fsSL https://github.com/dfinity/motoko/releases/download/${motoko_version}/motoko-linux64-${motoko_version}.tar.gz \
     | tar -xz -C /usr/local/bin && chmod +x /usr/local/bin \
     && curl -OL https://github.com/dfinity/quill/releases/download/0.3.0/quill-linux-x86_64 \
-    && chmod +x quill-linux-x86_64 && mv quill-linux-x86_64 /usr/local/bin/quill \
-    # install dfx and import test identities
-    && DFX_VERSION=${dfx_version} sh -ci "$(curl -fsSL https://sdk.dfinity.org/install.sh)" \
+    && chmod +x quill-linux-x86_64 && mv quill-linux-x86_64 /usr/local/bin/quill
+
+# install dfx and import test identities
+RUN DFX_VERSION=${dfx_version} sh -ci "$(curl -fsSL https://sdk.dfinity.org/install.sh)" \
     && dfx identity import --disable-encryption $DFX_DEV_ACCOUNT_IDENTITY ./identities/$DFX_DEV_ACCOUNT_IDENTITY/identity.pem \
     && dfx identity import --disable-encryption $DFX_DEV_IDENTITY ./identities/$DFX_DEV_IDENTITY/identity.pem \
     && dfx identity use $DFX_DEV_IDENTITY \

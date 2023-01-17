@@ -29,6 +29,7 @@ RUN rustup component add clippy rustfmt \
     && cargo install ic-wasm cargo-audit cargo-llvm-cov grcov
 
 RUN curl -L https://foundry.paradigm.xyz | bash
+RUN . $HOME/.bashrc && foundryup
 
 # install motoko & quill
 RUN curl -fsSL https://github.com/dfinity/motoko/releases/download/${motoko_version}/motoko-linux64-${motoko_version}.tar.gz \

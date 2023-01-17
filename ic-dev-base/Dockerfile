@@ -26,7 +26,7 @@ RUN apt-get update && apt-get -y full-upgrade \
 RUN rustup component add clippy rustfmt \
     && rustup target add wasm32-unknown-unknown \
     && rustup component add llvm-tools-preview \
-    && cargo install ic-cdk-optimizer cargo-audit cargo-llvm-cov grcov
+    && cargo install ic-wasm cargo-audit cargo-llvm-cov grcov
 
 RUN curl -L https://foundry.paradigm.xyz | bash
 

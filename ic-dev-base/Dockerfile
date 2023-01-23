@@ -36,7 +36,7 @@ RUN export URI="https://raw.githubusercontent.com/protocolbuffers/protobuf/v${PR
     curl --create-dirs -O --output-dir "${PROTOC_INCLUDE}/google/protobuf" "${URI}/empty.pb.h" && \
     curl --create-dirs -O --output-dir "${PROTOC_INCLUDE}/google/protobuf" "${URI}/empty.proto" && \
     curl --create-dirs -O --output-dir "${PROTOC_INCLUDE}/google/protobuf" "${URI}/empty.pb.cc"
-    # this would mean that a file can be found at $PROTOC_INCLUDE/google/protobuf/empy.*
+    # this would mean that a file can be found at $PROTOC_INCLUDE/google/protobuf/empty.*
 
 # rust & related toolchain
 RUN rustup component add clippy rustfmt \

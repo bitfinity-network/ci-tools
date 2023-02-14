@@ -23,8 +23,8 @@ on:
     types: [completed]
     branches: [main]
 env:
-  BUILD_TAG: rust1.66-dfx0.12-rc-2022-09-30
-  BASE_IMAGE: ghcr.io/${{ github.repository_owner }}/ic-dev-base:rust1.66-dfx0.12.1
+  BUILD_TAG: rust1.67-dfx0.12-rc-2022-09-30
+  BASE_IMAGE: ghcr.io/${{ github.repository_owner }}/ic-dev-base:rust1.67-dfx0.12.1
   BIN_IMAGE: ghcr.io/${{ github.repository_owner }}/ic-bin:rc-2022-09-30
 
 jobs:

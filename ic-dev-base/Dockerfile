@@ -28,7 +28,7 @@ RUN apt-get update && apt-get -y full-upgrade \
 # note that git tag must be available for provided version
 ARG PROTOC_VERSION=21.12
 ENV PROTOC_INCLUDE=${WORK_DIR}/protoc
-RUN curl -Lo protoc.zip "https://github.com/protocolbuffers/protobuf/releases/v${PROTOC_VERSION}/download/protoc-${PROTOC_VERSION}-linux-x86_64.zip"
+RUN curl -Lo protoc.zip "https://github.com/protocolbuffers/protobuf/releases/download/v${PROTOC_VERSION}/protoc-${PROTOC_VERSION}-linux-x86_64.zip"
 RUN unzip -q protoc.zip bin/protoc -d /usr/local && chmod a+x /usr/local/bin/protoc && rm protoc.zip
 RUN protoc --version
 

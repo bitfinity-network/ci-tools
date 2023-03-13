@@ -1,6 +1,5 @@
 FROM rust:1.68-slim-bullseye as base
 
-
 ENV DEBIAN_FRONTEND=noninteractive
 ENV WORK_DIR=/workspace
 ENV HOME=/workspace

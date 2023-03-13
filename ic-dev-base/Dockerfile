@@ -3,6 +3,8 @@ FROM rust:1.68-slim-bullseye as base
 ENV DEBIAN_FRONTEND=noninteractive
 ENV WORK_DIR=/workspace
 ENV HOME=/workspace
+# Could remove it later when sparse protocol will be set as default
+ENV CARGO_REGISTRIES_CRATES_IO_PROTOCOL=sparse
 
 WORKDIR $WORK_DIR
 

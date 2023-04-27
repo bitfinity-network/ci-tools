@@ -1,4 +1,4 @@
-FROM rust:1.68-slim-bullseye as base
+FROM rust:1.69-slim-bullseye as base
 
 ENV DEBIAN_FRONTEND=noninteractive
 ENV WORK_DIR=/workspace
@@ -44,7 +44,7 @@ RUN export URI="https://raw.githubusercontent.com/protocolbuffers/protobuf/v${PR
 RUN rustup component add clippy rustfmt \
     && rustup target add wasm32-unknown-unknown \
     && rustup component add llvm-tools-preview \
-    && cargo install ic-wasm cargo-audit cargo-llvm-cov grcov
+    && cargo install icx-proxy ic-wasm cargo-audit cargo-llvm-cov grcov 
 
 # getfoundry.sh
 RUN curl -L https://foundry.paradigm.xyz | bash
@@ -61,8 +61,10 @@ RUN curl -fsSL https://github.com/dfinity/motoko/releases/download/${motoko_vers
 RUN DFX_VERSION=${dfx_version} sh -ci "$(curl -fsSL https://sdk.dfinity.org/install.sh)" \
     && dfx identity import --disable-encryption $DFX_DEV_ACCOUNT_IDENTITY ./identities/$DFX_DEV_ACCOUNT_IDENTITY/identity.pem \
     && dfx identity import --disable-encryption $DFX_DEV_IDENTITY ./identities/$DFX_DEV_IDENTITY/identity.pem \
-    && dfx identity use $DFX_DEV_IDENTITY \
-    && rm -rf $CARGO_HOME/registry \
+    && dfx identity use $DFX_DEV_IDENTITY
+
+# Clean stuff
+RUN rm -rf $CARGO_HOME/registry \
     && chmod -R 0777 .cache \
     && chmod -R 0777 .config \
     && chown root:root /usr/local/bin/* \

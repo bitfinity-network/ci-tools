@@ -1,6 +1,21 @@
 ARG BIN_IMAGE=ghcr.io/infinity-swap/ic-bin:latest
 ARG BASE_IMAGE=ghcr.io/infinity-swap/ic-dev-base:latest
 
+FROM debian:bullseye as retesteth_build
+ENV RETEST_TAG=v0.3.0-shanghai
+
+WORKDIR /retesteth
+
+RUN apt-get update
+RUN apt-get install -y git cmake clang
+
+RUN git clone --depth 1 --branch develop https://github.com/ethereum/tests.git tests && \
+    git clone --depth 1 --branch ${RETEST_TAG} https://github.com/ethereum/retesteth.git git
+
+RUN cd git && mkdir -p build && cd build && \
+    cmake .. -DCMAKE_BUILD_TYPE=Release && \
+    make -j4
+
 FROM $BIN_IMAGE as ic_bin
 FROM $BASE_IMAGE
 
@@ -49,5 +64,9 @@ RUN chmod -R 0777 ./ && \
     chmod -R 0770 .dfx
 
 EXPOSE 8000
+
+# Adding retesteth
+COPY --from=retesteth_build --chown=root:root /retesteth/git/build/retesteth/retesteth /usr/local/bin/
+RUN retesteth -t BlockchainTests -- --clients evmc || :
 
 CMD (dfx start --host $IC_HOST --background && nginx)

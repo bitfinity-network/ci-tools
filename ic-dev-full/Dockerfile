@@ -11,7 +11,7 @@ WORKDIR /retesteth
 RUN apt-get update
 RUN apt-get install -y git cmake clang
 
-RUN git clone --depth 1 --branch $ETH_TESTS_TAG https://github.com/ethereum/tests.git tests && \
+RUN git clone --depth 1 --branch $ETH_TESTS_TAG https://github.com/ethereum/tests.git tests && rm -rf ./tests/.git &&\
     git clone --depth 1 --branch $RETESTETH_TAG https://github.com/ethereum/retesteth.git git
 
 RUN cd git && mkdir -p build && cd build && \
@@ -47,6 +47,12 @@ RUN echo "Y" | apt-get -y install nginx-light
 RUN apt-get clean && rm -rf /var/lib/apt/lists/*
 COPY --chown=root:root nginx.conf /etc/nginx/nginx.conf
 
+# Adding retesteth
+COPY --from=retesteth_build --chown=root:root /retesteth/git/build/retesteth/retesteth /usr/local/bin/
+COPY --from=retesteth_build --chown=root:root /retesteth/git/build/retesteth/tests $WORK_DIR/ethereum_tests
+RUN retesteth -t BlockchainTests -- --clients evmc || :
+
+# DFX
 RUN cd $DFX_WASMS_DIR && curl -SsO https://storage.googleapis.com/dfx-server_ic/testnet/wasm/ledger-canister-min.wasm && \
     cd $DFX_DID_DIR && curl -SsO https://storage.googleapis.com/dfx-server_ic/testnet/candid/ledger-min.did
     
@@ -54,7 +60,6 @@ RUN cd $DFX_WASMS_DIR && curl -SsO https://storage.googleapis.com/dfx-server_ic/
 RUN J=$(jq ".canisters += {\"ledger-test\":{\"wasm\":\"$DFX_WASMS_DIR/ledger-canister-min.wasm\",\"candid\":\"$DFX_DID_DIR/ledger-min.did\",\"type\":\"custom\"}}" ./dfx.json) && echo "$J" > ./dfx.json
 
 # Finishing stuff
-# RUN chmod -R 0777 neurons
 RUN chmod -R 0777 $DFX_WASMS_DIR $DFX_DID_DIR && \
     chmod -R 0755 /usr/local/bin
     
@@ -66,9 +71,5 @@ RUN chmod -R 0777 ./ && \
     chmod -R 0770 .dfx
 
 EXPOSE 8000
-
-# Adding retesteth
-COPY --from=retesteth_build --chown=root:root /retesteth/git/build/retesteth/retesteth /usr/local/bin/
-RUN retesteth -t BlockchainTests -- --clients evmc || :
 
 CMD (dfx start --host $IC_HOST --background && nginx)

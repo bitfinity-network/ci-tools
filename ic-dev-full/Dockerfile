@@ -2,15 +2,17 @@ ARG BIN_IMAGE=ghcr.io/infinity-swap/ic-bin:latest
 ARG BASE_IMAGE=ghcr.io/infinity-swap/ic-dev-base:latest
 
 FROM debian:bullseye as retesteth_build
-ENV RETEST_TAG=v0.3.0-shanghai
+# Please note that theese tags must be mutually compatible
+ARG RETESTETH_TAG=v0.3.0-shanghai
+ARG ETH_TESTS_TAG=v12
 
 WORKDIR /retesteth
 
 RUN apt-get update
 RUN apt-get install -y git cmake clang
 
-RUN git clone --depth 1 --branch develop https://github.com/ethereum/tests.git tests && \
-    git clone --depth 1 --branch ${RETEST_TAG} https://github.com/ethereum/retesteth.git git
+RUN git clone --depth 1 --branch $ETH_TESTS_TAG https://github.com/ethereum/tests.git tests && \
+    git clone --depth 1 --branch $RETESTETH_TAG https://github.com/ethereum/retesteth.git git
 
 RUN cd git && mkdir -p build && cd build && \
     cmake .. -DCMAKE_BUILD_TYPE=Release && \

@@ -49,7 +49,7 @@ COPY --chown=root:root nginx.conf /etc/nginx/nginx.conf
 
 # Adding retesteth
 COPY --from=retesteth_build --chown=root:root /retesteth/git/build/retesteth/retesteth /usr/local/bin/
-COPY --from=retesteth_build --chown=root:root /retesteth/git/build/retesteth/tests $WORK_DIR/ethereum_tests
+COPY --from=retesteth_build --chown=root:root /retesteth/tests $WORK_DIR/ethereum_tests
 RUN retesteth -t BlockchainTests -- --clients evmc || :
 
 # DFX

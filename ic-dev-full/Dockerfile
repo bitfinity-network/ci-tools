@@ -5,6 +5,7 @@ FROM debian:bullseye as retesteth_build
 # Please note that theese tags must be mutually compatible
 ARG RETESTETH_TAG=v0.3.0-shanghai
 ARG ETH_TESTS_TAG=v12.2
+
 WORKDIR /retesteth
 
 RUN apt-get update
@@ -15,7 +16,7 @@ RUN cd git && mkdir -p build && cd build && \
     cmake .. -DCMAKE_BUILD_TYPE=Release && \
     make -j4
 
-RUN curl -Lo eth_tests.tar.gz "https://github.com/ethereum/tests/archive/refs/tags/${ETH_TESTS_TAG}.tar.gz"
+RUN curl -Lo ethereum_tests.tar.gz "https://github.com/ethereum/tests/archive/refs/tags/${ETH_TESTS_TAG}.tar.gz"
 
 FROM $BIN_IMAGE as ic_bin
 FROM $BASE_IMAGE
@@ -48,7 +49,7 @@ COPY --chown=root:root nginx.conf /etc/nginx/nginx.conf
 
 # Adding retesteth
 COPY --from=retesteth_build --chown=root:root /retesteth/git/build/retesteth/retesteth /usr/local/bin/
-COPY --from=retesteth_build --chown=root:root /retesteth/eth_tests.tar.gz $WORK_DIR/
+COPY --from=retesteth_build --chown=root:root /retesteth/ethereum_tests.tar.gz $WORK_DIR/
 RUN retesteth -t BlockchainTests -- --clients evmc || :
 
 # DFX

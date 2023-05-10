@@ -4,19 +4,18 @@ ARG BASE_IMAGE=ghcr.io/infinity-swap/ic-dev-base:latest
 FROM debian:bullseye as retesteth_build
 # Please note that theese tags must be mutually compatible
 ARG RETESTETH_TAG=v0.3.0-shanghai
-ARG ETH_TESTS_TAG=v12
-
+ARG ETH_TESTS_TAG=v12.2
 WORKDIR /retesteth
 
 RUN apt-get update
-RUN apt-get install -y git cmake clang
+RUN apt-get install -y git cmake clang curl
 
-RUN git clone --depth 1 --branch $ETH_TESTS_TAG https://github.com/ethereum/tests.git tests && rm -rf ./tests/.git &&\
-    git clone --depth 1 --branch $RETESTETH_TAG https://github.com/ethereum/retesteth.git git
-
+RUN git clone --depth 1 --branch $RETESTETH_TAG https://github.com/ethereum/retesteth.git git
 RUN cd git && mkdir -p build && cd build && \
     cmake .. -DCMAKE_BUILD_TYPE=Release && \
     make -j4
+
+RUN curl -Lo eth_tests.tar.gz "https://github.com/ethereum/tests/archive/refs/tags/${ETH_TESTS_TAG}.tar.gz"
 
 FROM $BIN_IMAGE as ic_bin
 FROM $BASE_IMAGE
@@ -49,7 +48,7 @@ COPY --chown=root:root nginx.conf /etc/nginx/nginx.conf
 
 # Adding retesteth
 COPY --from=retesteth_build --chown=root:root /retesteth/git/build/retesteth/retesteth /usr/local/bin/
-COPY --from=retesteth_build --chown=root:root /retesteth/tests $WORK_DIR/ethereum_tests
+COPY --from=retesteth_build --chown=root:root /retesteth/eth_tests.tar.gz $WORK_DIR/
 RUN retesteth -t BlockchainTests -- --clients evmc || :
 
 # DFX

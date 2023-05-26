@@ -23,11 +23,13 @@ env:
 
 jobs:
   ic-dev-base-image:
-    runs-on: ubuntu-latest
+    runs-on: 4x150g-runner
 
     steps:
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v2
+        with:
+          platforms: amd64,arm64
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v2
@@ -54,6 +56,7 @@ jobs:
         with:
           push: ${{ (github.event_name != 'pull_request' && github.ref == 'refs/heads/main') ||  github.ref_type == 'tag' }}
           context: ./ic-dev-base
+          platforms: linux/amd64,linux/arm64/v8
           tags: |
             ghcr.io/${{ github.repository_owner }}/ic-dev-base:latest
             ghcr.io/${{ github.repository_owner }}/ic-dev-base:${{ env.BUILD_TAG }}

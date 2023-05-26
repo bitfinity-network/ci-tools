@@ -1,8 +1,9 @@
-FROM rust:1.69-slim-bullseye as base
+FROM --platform=$TARGETPLATFORM rust:1.69-slim-bullseye as base
 
 ENV DEBIAN_FRONTEND=noninteractive
 ENV WORK_DIR=/workspace
 ENV HOME=/workspace
+
 # Could remove it later when sparse protocol will be set as default
 ENV CARGO_REGISTRIES_CRATES_IO_PROTOCOL=sparse
 
@@ -30,9 +31,11 @@ RUN apt-get update && apt-get -y full-upgrade \
 # note that git tag must be available for provided version
 ARG PROTOC_VERSION=21.12
 ENV PROTOC_INCLUDE=${WORK_DIR}/protoc
-RUN curl -Lo protoc.zip "https://github.com/protocolbuffers/protobuf/releases/download/v${PROTOC_VERSION}/protoc-${PROTOC_VERSION}-linux-x86_64.zip"
-RUN unzip -q protoc.zip bin/protoc -d /usr/local && chmod a+x /usr/local/bin/protoc && rm protoc.zip
-RUN protoc --version
+# Skip protobuf for aarch64 - no builds available
+RUN if [ "$TARGETPLATFORM" = "linux/amd64" ]; then $( \ 
+        curl -Lo protoc.zip "https://github.com/protocolbuffers/protobuf/releases/download/v${PROTOC_VERSION}/protoc-${PROTOC_VERSION}-linux-${ARCH}.zip" \
+        && unzip -q protoc.zip bin/protoc -d /usr/local && chmod a+x /usr/local/bin/protoc && rm protoc.zip && protoc --version \
+    ); fi
 
 RUN export URI="https://raw.githubusercontent.com/protocolbuffers/protobuf/v${PROTOC_VERSION}/src/google/protobuf" && \
     curl --create-dirs -O --output-dir "${PROTOC_INCLUDE}/google/protobuf" "${URI}/empty.pb.h" && \
@@ -52,10 +55,13 @@ ENV PATH="$PATH:$HOME/.foundry/bin"
 RUN foundryup
 
 # motoko & quill
-RUN curl -fsSL https://github.com/dfinity/motoko/releases/download/${motoko_version}/motoko-linux64-${motoko_version}.tar.gz \
-    | tar -xz -C /usr/local/bin && chmod +x /usr/local/bin \
-    && curl -OL https://github.com/dfinity/quill/releases/download/0.3.0/quill-linux-x86_64 \
-    && chmod +x quill-linux-x86_64 && mv quill-linux-x86_64 /usr/local/bin/quill
+# Skip motoko for aarch64 - no builds available
+RUN if [ "$TARGETPLATFORM" = "linux/amd64" ]; then $(\
+        curl -fsSL https://github.com/dfinity/motoko/releases/download/${motoko_version}/motoko-linux64-${motoko_version}.tar.gz | tar -xz -C /usr/local/bin \
+        && chmod +x /usr/local/bin \
+        && curl -OL https://github.com/dfinity/quill/releases/download/0.3.0/quill-linux-x86_64 \
+        && chmod +x quill-linux-x86_64 && mv quill-linux-x86_64 /usr/local/bin/quill \
+    ); fi
 
 # dfx and import test identities
 RUN DFX_VERSION=${dfx_version} sh -ci "$(curl -fsSL https://sdk.dfinity.org/install.sh)" \

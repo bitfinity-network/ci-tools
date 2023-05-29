@@ -2,7 +2,7 @@ ARG BASE_IMAGE=ghcr.io/infinity-swap/ic-dev-base:latest
 
 FROM ${BASE_IMAGE} as ic_builder
 
-ARG IC_BUILD_BRANCH=patched-rc--2022-09-30_18-31
+ARG IC_BUILD_BRANCH=rc--2023-05-28_23-01
 ARG IC_REPO=https://github.com/infinity-swap/ic.git
 # Just a hack to use it in next ENV instructions
 ARG WORK_DIR=$WORK_DIR

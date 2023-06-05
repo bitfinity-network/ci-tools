@@ -19,8 +19,8 @@ on:
       - "ic-bin/**"
 
 env:
-  BUILD_TAG: rc-2023-05-28
-  IC_BUILD_BRANCH: rc--2023-05-28_23-01
+  BUILD_TAG: rc--2023-06-01
+  IC_BUILD_BRANCH: patched-rc--2023-06-01_23-01
 
 jobs:
   ic-binaries:

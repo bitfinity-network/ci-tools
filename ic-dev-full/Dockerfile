@@ -51,6 +51,7 @@ RUN chmod -R 0777 ./ && \
     # But we can not do it for DFX directory
     mkdir -p .dfx && chmod -R 0770 .dfx
 
+# 8080 port required to dfx nns install to work
 EXPOSE 8080
 
 CMD (dfx start --host $IC_HOST --background && nginx)

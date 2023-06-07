@@ -1,6 +1,5 @@
 ARG BIN_IMAGE=ghcr.io/infinity-swap/ic-bin:latest
-# ARG BASE_IMAGE=ghcr.io/infinity-swap/ic-dev-base:latest
-ARG BASE_IMAGE=dev:ic-base
+ARG BASE_IMAGE=ghcr.io/infinity-swap/ic-dev-base:latest
 
 FROM $BIN_IMAGE as ic_bin
 FROM $BASE_IMAGE

@@ -9,8 +9,8 @@ ENV CARGO_REGISTRIES_CRATES_IO_PROTOCOL=sparse
 WORKDIR $WORK_DIR
 
 # Dfinity SDK
-ARG motoko_version=0.8.2
-ARG dfx_version=0.13.1
+ARG motoko_version=0.9.1
+ARG dfx_version=0.14.1
 ARG DFX_DEV_IDENTITY=ic_dev_identity
 ARG DFX_DEV_ACCOUNT_IDENTITY=ic_dev_account
 

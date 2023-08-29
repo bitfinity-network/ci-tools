@@ -1,8 +1,7 @@
-ARG BIN_IMAGE=ghcr.io/infinity-swap/ic-bin:latest
-# ARG BASE_IMAGE=ghcr.io/infinity-swap/ic-dev-base:latest
-ARG BASE_IMAGE=dev:ic-base
+# ARG BIN_IMAGE=ghcr.io/infinity-swap/ic-bin:latest
+ARG BASE_IMAGE=ghcr.io/infinity-swap/ic-dev-base:latest
 
-FROM $BIN_IMAGE as ic_bin
+# FROM $BIN_IMAGE as ic_bin
 FROM $BASE_IMAGE
 
 ARG WORK_DIR=$WORK_DIR
@@ -28,10 +27,11 @@ RUN echo "Y" | apt-get -y install nginx-light
 RUN apt-get clean && rm -rf /var/lib/apt/lists/*
 COPY --chown=root:root nginx.conf /etc/nginx/nginx.conf
 
+# Temporary disabled
 # Unpack pre-built resources
-COPY --from=ic_bin --chown=root:root /ic/wasm $WORK_DIR/wasm
-COPY --from=ic_bin --chown=root:root /ic/bin/ifx /usr/local/bin/
-COPY --from=ic_bin --chown=root:root /ic/bin/ic-nns-init /usr/local/bin/
+#COPY --from=ic_bin --chown=root:root /ic/wasm $WORK_DIR/wasm
+#COPY --from=ic_bin --chown=root:root /ic/bin/ifx /usr/local/bin/
+#COPY --from=ic_bin --chown=root:root /ic/bin/ic-nns-init /usr/local/bin/
 
 # DFX
 RUN cd $DFX_WASMS_DIR && curl -SsO https://storage.googleapis.com/dfx-server_ic/testnet/wasm/ledger-canister-min.wasm && \

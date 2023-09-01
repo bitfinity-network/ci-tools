@@ -23,7 +23,7 @@ env:
 
 jobs:
   ic-dev-base-image:
-    runs-on: ubuntu-latest
+    runs-on: 4x150g-runner
 
     steps:
       - name: Set up QEMU

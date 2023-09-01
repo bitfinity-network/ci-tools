@@ -12,9 +12,9 @@ WORKDIR $WORK_DIR
 ## https://github.com/dfinity/quill/releases
 ARG quill_version=0.4.2
 ## https://github.com/dfinity/motoko/releases
-ARG motoko_version=0.9.6
+ARG motoko_version=0.9.8
 ## https://github.com/dfinity/sdk/releases
-ARG dfx_version=0.14.3
+ARG dfx_version=0.14.4
 ARG DFX_DEV_IDENTITY=ic_dev_identity
 ARG DFX_DEV_ACCOUNT_IDENTITY=ic_dev_account
 
@@ -51,6 +51,7 @@ RUN rustup component add clippy rustfmt \
     && cargo install icx-proxy ic-wasm cargo-audit cargo-llvm-cov grcov 
 
 # NVM
+ENV NVM_SH=/workspace/.nvm/nvm.sh
 RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.5/install.sh | bash
 RUN echo 'export NVM_DIR="$([ -z "${XDG_CONFIG_HOME-}" ] && printf %s "${HOME}/.nvm" || printf %s "${XDG_CONFIG_HOME}/nvm")" \n[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"' >> $HOME/.bashrc
 

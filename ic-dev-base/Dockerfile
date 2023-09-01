@@ -50,6 +50,10 @@ RUN rustup component add clippy rustfmt \
     && rustup component add llvm-tools-preview \
     && cargo install icx-proxy ic-wasm cargo-audit cargo-llvm-cov grcov 
 
+# NVM
+RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.5/install.sh | bash
+RUN echo 'export NVM_DIR="$([ -z "${XDG_CONFIG_HOME-}" ] && printf %s "${HOME}/.nvm" || printf %s "${XDG_CONFIG_HOME}/nvm")" \n[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"' >> $HOME/.bashrc
+
 # getfoundry.sh
 RUN curl -L https://foundry.paradigm.xyz | bash
 ENV PATH="$PATH:$HOME/.foundry/bin"

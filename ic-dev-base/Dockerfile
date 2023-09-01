@@ -10,7 +10,7 @@ WORKDIR $WORK_DIR
 
 # Dfinity SDK
 ## https://github.com/dfinity/quill/releases
-ARG quill_version=0.4.2
+ARG quill_version=v0.4.2
 ## https://github.com/dfinity/motoko/releases
 ARG motoko_version=0.9.8
 ## https://github.com/dfinity/sdk/releases
@@ -61,7 +61,7 @@ ENV PATH="$PATH:$HOME/.foundry/bin"
 RUN foundryup
 
 # motoko & quill
-RUN curl -fsSL https://github.com/dfinity/motoko/releases/download/${motoko_version}/motoko-linux64-${motoko_version}.tar.gz \
+RUN curl -fsSL https://github.com/dfinity/motoko/releases/download/${motoko_version}/motoko-Linux-x86_64-${motoko_version}.tar.gz \
     | tar -xz -C /usr/local/bin && chmod +x /usr/local/bin \
     && curl -OL https://github.com/dfinity/quill/releases/download/${quill_version}/quill-linux-x86_64 \
     && chmod +x quill-linux-x86_64 && mv quill-linux-x86_64 /usr/local/bin/quill

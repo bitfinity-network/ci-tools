@@ -23,14 +23,14 @@ on:
     types: [completed]
     branches: [main]
 env:
-  BUILD_TAG: rust1.70-dfx0.14
-  BASE_IMAGE: ghcr.io/${{ github.repository_owner }}/ic-dev-base:rust1.70-dfx0.14.1
+  BUILD_TAG: rust1.72-dfx0.14
+  BASE_IMAGE: ghcr.io/${{ github.repository_owner }}/ic-dev-base:rust1.72-dfx0.14.4
   BIN_IMAGE: ghcr.io/${{ github.repository_owner }}/ic-bin:rc-2022-09-30
 
 jobs:
   ic-full-image:
     if: ${{ ! github.event.workflow_run || (github.event.workflow_run.conclusion == 'success') }}
-    runs-on: ubuntu-latest
+    runs-on: 4x150g-runner
 
     steps:
       - name: Set up QEMU

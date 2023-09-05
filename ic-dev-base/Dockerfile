@@ -1,4 +1,4 @@
-FROM rust:1.70-slim-bullseye as base
+FROM rust:1.72-slim-bullseye as base
 
 ENV DEBIAN_FRONTEND=noninteractive
 ENV WORK_DIR=/workspace
@@ -9,8 +9,12 @@ ENV CARGO_REGISTRIES_CRATES_IO_PROTOCOL=sparse
 WORKDIR $WORK_DIR
 
 # Dfinity SDK
-ARG motoko_version=0.9.1
-ARG dfx_version=0.14.1
+## https://github.com/dfinity/quill/releases
+ARG quill_version=v0.4.2
+## https://github.com/dfinity/motoko/releases
+ARG motoko_version=0.9.8
+## https://github.com/dfinity/sdk/releases
+ARG dfx_version=0.14.4
 ARG DFX_DEV_IDENTITY=ic_dev_identity
 ARG DFX_DEV_ACCOUNT_IDENTITY=ic_dev_account
 
@@ -47,6 +51,7 @@ RUN rustup component add clippy rustfmt \
     && cargo install icx-proxy ic-wasm cargo-audit cargo-llvm-cov grcov 
 
 # NVM
+ENV NVM_SH=/workspace/.nvm/nvm.sh
 RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.5/install.sh | bash
 RUN echo 'export NVM_DIR="$([ -z "${XDG_CONFIG_HOME-}" ] && printf %s "${HOME}/.nvm" || printf %s "${XDG_CONFIG_HOME}/nvm")" \n[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"' >> $HOME/.bashrc
 
@@ -56,9 +61,9 @@ ENV PATH="$PATH:$HOME/.foundry/bin"
 RUN foundryup
 
 # motoko & quill
-RUN curl -fsSL https://github.com/dfinity/motoko/releases/download/${motoko_version}/motoko-linux64-${motoko_version}.tar.gz \
+RUN curl -fsSL https://github.com/dfinity/motoko/releases/download/${motoko_version}/motoko-Linux-x86_64-${motoko_version}.tar.gz \
     | tar -xz -C /usr/local/bin && chmod +x /usr/local/bin \
-    && curl -OL https://github.com/dfinity/quill/releases/download/0.3.0/quill-linux-x86_64 \
+    && curl -OL https://github.com/dfinity/quill/releases/download/${quill_version}/quill-linux-x86_64 \
     && chmod +x quill-linux-x86_64 && mv quill-linux-x86_64 /usr/local/bin/quill
 
 # dfx and import test identities

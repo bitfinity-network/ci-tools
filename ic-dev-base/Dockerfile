@@ -12,9 +12,9 @@ WORKDIR $WORK_DIR
 ## https://github.com/dfinity/quill/releases
 ARG quill_version=v0.4.2
 ## https://github.com/dfinity/motoko/releases
-ARG motoko_version=0.9.8
+ARG motoko_version=0.10.0
 ## https://github.com/dfinity/sdk/releases
-ARG dfx_version=0.14.4
+ARG dfx_version=0.15.0-beta.6
 ARG DFX_DEV_IDENTITY=ic_dev_identity
 ARG DFX_DEV_ACCOUNT_IDENTITY=ic_dev_account
 
@@ -32,7 +32,7 @@ RUN apt-get update && apt-get -y full-upgrade \
 # protoc
 # latest version # echo $(curl -s "https://api.github.com/repos/protocolbuffers/protobuf/releases/latest" | grep -Po '"tag_name": "v\K[0-9.]+')
 # note that git tag must be available for provided version
-ARG PROTOC_VERSION=21.12
+ARG PROTOC_VERSION=24.3
 ENV PROTOC_INCLUDE=${WORK_DIR}/protoc
 RUN curl -Lo protoc.zip "https://github.com/protocolbuffers/protobuf/releases/download/v${PROTOC_VERSION}/protoc-${PROTOC_VERSION}-linux-x86_64.zip"
 RUN unzip -q protoc.zip bin/protoc -d /usr/local && chmod a+x /usr/local/bin/protoc && rm protoc.zip
@@ -51,6 +51,7 @@ RUN rustup component add clippy rustfmt \
     && cargo install icx-proxy ic-wasm cargo-audit cargo-llvm-cov grcov 
 
 # NVM
+# https://github.com/nvm-sh/nvm/releases
 ENV NVM_SH=/workspace/.nvm/nvm.sh
 RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.5/install.sh | bash
 RUN echo 'export NVM_DIR="$([ -z "${XDG_CONFIG_HOME-}" ] && printf %s "${HOME}/.nvm" || printf %s "${XDG_CONFIG_HOME}/nvm")" \n[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"' >> $HOME/.bashrc

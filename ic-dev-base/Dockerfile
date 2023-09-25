@@ -14,7 +14,7 @@ ARG quill_version=v0.4.2
 ## https://github.com/dfinity/motoko/releases
 ARG motoko_version=0.10.0
 ## https://github.com/dfinity/sdk/releases
-ARG dfx_version=0.15.0-beta.6
+ARG dfx_version=0.15.0
 ARG DFX_DEV_IDENTITY=ic_dev_identity
 ARG DFX_DEV_ACCOUNT_IDENTITY=ic_dev_account
 

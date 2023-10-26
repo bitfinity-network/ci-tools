@@ -48,7 +48,7 @@ RUN export URI="https://raw.githubusercontent.com/protocolbuffers/protobuf/v${PR
 RUN rustup component add clippy rustfmt \
     && rustup target add wasm32-unknown-unknown \
     && rustup component add llvm-tools-preview \
-    && cargo install --version 0.10.1\
+    && cargo install --version 0.10.1 \
     && cargo install icx-proxy ic-wasm cargo-audit cargo-llvm-cov grcov
 
 # NVM

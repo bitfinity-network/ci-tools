@@ -1,6 +1,6 @@
 name: ic_dev_full_image
 
-concurrency: 
+concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
@@ -11,20 +11,20 @@ on:
     branches:
       - main
     paths:
-      - "ic-dev-full/**"
+      - 'ic-dev-full/**'
   pull_request:
     branches:
-      - "main"
+      - 'main'
     paths:
-      - "ic-dev-full/**"
+      - 'ic-dev-full/**'
 
   workflow_run:
     workflows: [rust_dfx_base_image, ic_binaries]
     types: [completed]
     branches: [main]
 env:
-  BUILD_TAG: rust1.73-dfx0.15
-  BASE_IMAGE: ghcr.io/${{ github.repository_owner }}/ic-dev-base:rust1.73-dfx0.15
+  BUILD_TAG: rust1.75-dfx0.15
+  BASE_IMAGE: ghcr.io/${{ github.repository_owner }}/ic-dev-base:rust1.75-dfx0.15
   BIN_IMAGE: ghcr.io/${{ github.repository_owner }}/ic-bin:rc-2022-09-30
 
 jobs:
@@ -56,7 +56,7 @@ jobs:
       - name: Checkout template repo
         uses: actions/checkout@v3
 
-      - name: "Full image"
+      - name: 'Full image'
         uses: docker/build-push-action@v4
         with:
           push: ${{ (github.event_name != 'pull_request' && github.ref == 'refs/heads/main') ||  github.ref_type == 'tag' }}

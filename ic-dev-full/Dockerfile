@@ -15,7 +15,7 @@ ENV PUBLIC_DIR=/workspace/static
 WORKDIR $WORK_DIR
 
 RUN mkdir -p $DFX_WASMS_DIR $DFX_DID_DIR $PUBLIC_DIR
-    
+
 COPY neurons/* ${DFX_NEURONS_DIR}/
 COPY dfx.json ${WORK_DIR}
 COPY networks.json ${WORK_DIR}/.config/dfx
@@ -36,7 +36,7 @@ COPY --chown=root:root nginx.conf /etc/nginx/nginx.conf
 # DFX
 RUN cd $DFX_WASMS_DIR && curl -SsO https://storage.googleapis.com/dfx-server_ic/testnet/wasm/ledger-canister-min.wasm && \
     cd $DFX_DID_DIR && curl -SsO https://storage.googleapis.com/dfx-server_ic/testnet/candid/ledger-min.did
-    
+
 # Reference CLI command to add something into dfx
 RUN J=$(jq ".canisters += {\"ledger-test\":{\"wasm\":\"$DFX_WASMS_DIR/ledger-canister-min.wasm\",\"candid\":\"$DFX_DID_DIR/ledger-min.did\",\"type\":\"custom\"}}" ./dfx.json) && echo "$J" > ./dfx.json
 
@@ -44,7 +44,7 @@ RUN J=$(jq ".canisters += {\"ledger-test\":{\"wasm\":\"$DFX_WASMS_DIR/ledger-can
 RUN chmod -R 0777 $DFX_WASMS_DIR $DFX_DID_DIR && \
     chmod -R 0755 /usr/local/bin ${WORK_DIR}/.config
 
-# Disable creating NNS canisters for now    
+# Disable creating NNS canisters for now
 # RUN dfx start --clean --background && nns-init.sh && dfx stop
 
 # All workspace should be accessible for any user

@@ -25,7 +25,7 @@ COPY identities ./identities
 
 RUN apt-get update && apt-get -y full-upgrade \
     && apt-get install -y pkg-config curl git gzip unzip tar pigz build-essential cmake \ 
-    libssl-dev clang liblmdb-dev libunwind-dev csvkit jq python3 pipenv lcov \
+    libssl-dev clang liblmdb-dev libunwind-dev csvkit jq python3 pipenv lcov gcc-multilib \
     && apt-get clean && rm -rf /var/lib/apt/lists/* \
     && python3 -m pip install --upgrade pip
 
@@ -47,6 +47,7 @@ RUN export URI="https://raw.githubusercontent.com/protocolbuffers/protobuf/v${PR
 # rust & related toolchain
 RUN rustup component add clippy rustfmt \
     && rustup target add wasm32-unknown-unknown \
+    && rustup target add i686-unknown-linux-gnu \
     && rustup component add llvm-tools-preview \
     && cargo install --version 0.10.1 icx-proxy \
     && cargo install ic-wasm cargo-audit cargo-llvm-cov grcov

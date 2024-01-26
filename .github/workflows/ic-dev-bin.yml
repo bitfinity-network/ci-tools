@@ -1,6 +1,6 @@
 name: ic_binaries
 
-concurrency: 
+concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
@@ -11,12 +11,12 @@ on:
     branches:
       - main
     paths:
-      - "ic-bin/**"
+      - 'ic-bin/**'
   pull_request:
     branches:
-      - "main"
+      - 'main'
     paths:
-      - "ic-bin/**"
+      - 'ic-bin/**'
 
 env:
   BUILD_TAG: rc-2022-09-30

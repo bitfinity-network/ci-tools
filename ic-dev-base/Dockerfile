@@ -1,4 +1,4 @@
-FROM rust:1.73-slim-bullseye as base
+FROM rust:1.75-slim-bullseye as base
 
 ENV DEBIAN_FRONTEND=noninteractive
 ENV WORK_DIR=/workspace
@@ -14,7 +14,7 @@ ARG quill_version=v0.4.2
 ## https://github.com/dfinity/motoko/releases
 ARG motoko_version=0.10.0
 ## https://github.com/dfinity/sdk/releases
-ARG dfx_version=0.15.1
+ARG dfx_version=0.15.3
 ARG DFX_DEV_IDENTITY=ic_dev_identity
 ARG DFX_DEV_ACCOUNT_IDENTITY=ic_dev_account
 
@@ -42,7 +42,7 @@ RUN export URI="https://raw.githubusercontent.com/protocolbuffers/protobuf/v${PR
     curl --create-dirs -O --output-dir "${PROTOC_INCLUDE}/google/protobuf" "${URI}/empty.pb.h" && \
     curl --create-dirs -O --output-dir "${PROTOC_INCLUDE}/google/protobuf" "${URI}/empty.proto" && \
     curl --create-dirs -O --output-dir "${PROTOC_INCLUDE}/google/protobuf" "${URI}/empty.pb.cc"
-    # this would mean that a file can be found at $PROTOC_INCLUDE/google/protobuf/empty.*
+# this would mean that a file can be found at $PROTOC_INCLUDE/google/protobuf/empty.*
 
 # rust & related toolchain
 RUN rustup component add clippy rustfmt \

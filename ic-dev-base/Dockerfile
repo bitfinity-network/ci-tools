@@ -1,20 +1,18 @@
-FROM rust:1.75-slim-bullseye as base
+FROM rust:1.77-slim-bullseye as base
 
 ENV DEBIAN_FRONTEND=noninteractive
 ENV WORK_DIR=/workspace
 ENV HOME=/workspace
-# Could remove it later when sparse protocol will be set as default
-ENV CARGO_REGISTRIES_CRATES_IO_PROTOCOL=sparse
 
 WORKDIR $WORK_DIR
 
 # Dfinity SDK
 ## https://github.com/dfinity/quill/releases
-ARG quill_version=v0.4.2
+ARG quill_version=v0.4.4
 ## https://github.com/dfinity/motoko/releases
-ARG motoko_version=0.10.0
+ARG motoko_version=0.11.1
 ## https://github.com/dfinity/sdk/releases
-ARG dfx_version=0.15.3
+ARG dfx_version=0.19.0
 ARG DFX_DEV_IDENTITY=ic_dev_identity
 ARG DFX_DEV_ACCOUNT_IDENTITY=ic_dev_account
 
@@ -32,7 +30,7 @@ RUN apt-get update && apt-get -y full-upgrade \
 # protoc
 # latest version # echo $(curl -s "https://api.github.com/repos/protocolbuffers/protobuf/releases/latest" | grep -Po '"tag_name": "v\K[0-9.]+')
 # note that git tag must be available for provided version
-ARG PROTOC_VERSION=24.3
+ARG PROTOC_VERSION=26.1
 ENV PROTOC_INCLUDE=${WORK_DIR}/protoc
 RUN curl -Lo protoc.zip "https://github.com/protocolbuffers/protobuf/releases/download/v${PROTOC_VERSION}/protoc-${PROTOC_VERSION}-linux-x86_64.zip"
 RUN unzip -q protoc.zip bin/protoc -d /usr/local && chmod a+x /usr/local/bin/protoc && rm protoc.zip

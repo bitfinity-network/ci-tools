@@ -52,8 +52,9 @@ RUN rustup component add clippy rustfmt \
 
 # NVM
 # https://github.com/nvm-sh/nvm/releases
+ARG NVM_VERSION=0.39.7
 ENV NVM_SH=/workspace/.nvm/nvm.sh
-RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.5/install.sh | bash
+RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v${NVM_VERSION}/install.sh | bash
 RUN echo 'export NVM_DIR="$([ -z "${XDG_CONFIG_HOME-}" ] && printf %s "${HOME}/.nvm" || printf %s "${XDG_CONFIG_HOME}/nvm")" \n[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"' >> $HOME/.bashrc
 
 # getfoundry.sh
@@ -69,12 +70,11 @@ RUN curl -fsSL https://github.com/dfinity/motoko/releases/download/${motoko_vers
 
 # dfx and import test identities
 ENV DFXVM_INIT_YES=true
+ENV PATH="${PATH}:/root/.local/share/dfx/bin"
 RUN DFX_VERSION=${dfx_version} sh -ci "$(curl -fsSL https://internetcomputer.org/install.sh)" \
     && dfx identity import --disable-encryption $DFX_DEV_ACCOUNT_IDENTITY ./identities/$DFX_DEV_ACCOUNT_IDENTITY/identity.pem \
     && dfx identity import --disable-encryption $DFX_DEV_IDENTITY ./identities/$DFX_DEV_IDENTITY/identity.pem \
     && dfx identity use $DFX_DEV_IDENTITY
-
-RUN dfx --version
 
 # Clean stuff
 RUN rm -rf $CARGO_HOME/registry \

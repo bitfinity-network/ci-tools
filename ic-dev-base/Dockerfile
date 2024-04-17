@@ -68,10 +68,13 @@ RUN curl -fsSL https://github.com/dfinity/motoko/releases/download/${motoko_vers
     && chmod +x quill-linux-x86_64 && mv quill-linux-x86_64 /usr/local/bin/quill
 
 # dfx and import test identities
+ENV DFXVM_INIT_YES=true
 RUN DFX_VERSION=${dfx_version} sh -ci "$(curl -fsSL https://internetcomputer.org/install.sh)" \
     && dfx identity import --disable-encryption $DFX_DEV_ACCOUNT_IDENTITY ./identities/$DFX_DEV_ACCOUNT_IDENTITY/identity.pem \
     && dfx identity import --disable-encryption $DFX_DEV_IDENTITY ./identities/$DFX_DEV_IDENTITY/identity.pem \
     && dfx identity use $DFX_DEV_IDENTITY
+
+RUN dfx --version
 
 # Clean stuff
 RUN rm -rf $CARGO_HOME/registry \

@@ -70,8 +70,11 @@ RUN curl -fsSL https://github.com/dfinity/motoko/releases/download/${motoko_vers
 
 # dfx and import test identities
 ENV DFXVM_INIT_YES=true
-ENV PATH="${PATH}:/root/.local/share/dfx/bin"
-RUN DFX_VERSION=${dfx_version} sh -ci "$(curl -fsSL https://internetcomputer.org/install.sh)" \
+# ENV PATH="${PATH}:/root/.local/share/dfx/bin"
+
+RUN DFX_VERSION=${dfx_version} sh -ci "$(curl -fsSL https://internetcomputer.org/install.sh)"
+
+RUN . "$HOME/.local/share/dfx/env" \
     && dfx identity import --disable-encryption $DFX_DEV_ACCOUNT_IDENTITY ./identities/$DFX_DEV_ACCOUNT_IDENTITY/identity.pem \
     && dfx identity import --disable-encryption $DFX_DEV_IDENTITY ./identities/$DFX_DEV_IDENTITY/identity.pem \
     && dfx identity use $DFX_DEV_IDENTITY

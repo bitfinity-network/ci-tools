@@ -13,6 +13,8 @@ ARG quill_version=v0.4.4
 ARG motoko_version=0.11.1
 ## https://github.com/dfinity/sdk/releases
 ARG dfx_version=0.19.0
+ARG nvm_version=0.39.7
+
 ARG DFX_DEV_IDENTITY=ic_dev_identity
 ARG DFX_DEV_ACCOUNT_IDENTITY=ic_dev_account
 
@@ -52,9 +54,8 @@ RUN rustup component add clippy rustfmt \
 
 # NVM
 # https://github.com/nvm-sh/nvm/releases
-ARG NVM_VERSION=0.39.7
 ENV NVM_SH=/workspace/.nvm/nvm.sh
-RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v${NVM_VERSION}/install.sh | bash
+RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v${nvm_version}/install.sh | bash
 RUN echo 'export NVM_DIR="$([ -z "${XDG_CONFIG_HOME-}" ] && printf %s "${HOME}/.nvm" || printf %s "${XDG_CONFIG_HOME}/nvm")" \n[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"' >> $HOME/.bashrc
 
 # getfoundry.sh

@@ -80,6 +80,7 @@ RUN . "$HOME/.local/share/dfx/env" \
     && dfx identity use $DFX_DEV_IDENTITY
 
 # Fix DFX/Github init paths issues
+ENV PATH="$HOME/.local/share/dfx/bin:$PATH"
 RUN sed -i 's/\$HOME/\/workspace/g' /workspace/.bashrc \
     && sed -i 's/\$HOME/\/workspace/g' /workspace/.profile \
     && sed -i 's/\$HOME/\/workspace/g' /workspace/.local/share/dfx/env

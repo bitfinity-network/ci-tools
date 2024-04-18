@@ -71,7 +71,6 @@ RUN curl -fsSL https://github.com/dfinity/motoko/releases/download/${motoko_vers
 
 # dfx and import test identities
 ENV DFXVM_INIT_YES=true
-# ENV PATH="${PATH}:/root/.local/share/dfx/bin"
 
 RUN DFX_VERSION=${dfx_version} sh -ci "$(curl -fsSL https://internetcomputer.org/install.sh)"
 
@@ -79,6 +78,11 @@ RUN . "$HOME/.local/share/dfx/env" \
     && dfx identity import --disable-encryption $DFX_DEV_ACCOUNT_IDENTITY ./identities/$DFX_DEV_ACCOUNT_IDENTITY/identity.pem \
     && dfx identity import --disable-encryption $DFX_DEV_IDENTITY ./identities/$DFX_DEV_IDENTITY/identity.pem \
     && dfx identity use $DFX_DEV_IDENTITY
+
+# Fix DFX/Github init paths issues
+RUN sed -i 's/\$HOME/\/workspace/g' /workspace/.bashrc \
+    && sed -i 's/\$HOME/\/workspace/g' /workspace/.profile \
+    && sed -i 's/\$HOME/\/workspace/g' /workspace/.local/share/dfx/env
 
 # Clean stuff
 RUN rm -rf $CARGO_HOME/registry \

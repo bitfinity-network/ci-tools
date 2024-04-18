@@ -12,11 +12,13 @@ on:
       - main
     paths:
       - 'ic-dev-full/**'
+      - '.github/workflows/ic-dev-full.yml'
   pull_request:
     branches:
       - 'main'
     paths:
       - 'ic-dev-full/**'
+      - '.github/workflows/ic-dev-full.yml'
 
   workflow_run:
     workflows: [rust_dfx_base_image, ic_binaries]

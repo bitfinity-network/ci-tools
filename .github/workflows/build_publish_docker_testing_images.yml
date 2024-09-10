@@ -22,7 +22,7 @@ jobs:
   publish-testing-image:
     strategy:
       matrix:
-        image: ["testing-local-ssl-proxy"]
+        image: ["local-ssl-proxy"]
 
     runs-on: ubuntu-latest
     # runs-on: 4x150g-runner
@@ -38,16 +38,10 @@ jobs:
           username: ${{ secrets.GH_PKG_LOGIN }}
           password: ${{ secrets.GH_PKG_TOKEN }}
 
-      - name: Extract metadata (tags, labels) for Docker
-        id: gh-meta
-        uses: docker/metadata-action@v5
-        with:
-          images: ghcr.io/${{ github.repository_owner }}/${{ matrix.image }}
-
       - name: Build and push Docker image to GitHub Container Registry
         uses: docker/build-push-action@v5
         with:
           context: ./testing
           file: ./${{ matrix.image }}/Dockerfile
           push: true
-          tags: ${{ steps.gh-meta.outputs.tags }}
+          tags: testing-${{ matrix.image }}:latest

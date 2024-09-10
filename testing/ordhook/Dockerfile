@@ -37,7 +37,7 @@ RUN apt-get update && apt-get install -y ca-certificates libssl-dev libclang-11-
 COPY --from=build /out/ordhook /bin/ordhook
 
 COPY ordhook/ordhook.sh /bin/ordhook.sh
-COPY ordhook/Ordhook.toml /bin/Ordhook.toml
+COPY ordhook/Ordhook.toml /Ordhook.toml
 
 WORKDIR /workspace
 

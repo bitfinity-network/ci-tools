@@ -8,6 +8,6 @@ RUN sed -i -e 's/https:\/\/api.hiro.so/http:\/\/localhost:3000/g' "lib/constants
 RUN npm install
 RUN npm run build
 
-COPY ./ordinals-explorer/ordinals-explorer.env /usr/src/ordinals-explorer/.env.production
+COPY ./hirosystems-ordinals-explorer/ordinals-explorer.env /usr/src/ordinals-explorer/.env.production
 
 ENTRYPOINT [ "npm", "start" ]

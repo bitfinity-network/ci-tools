@@ -11,10 +11,10 @@ services:
     build:
       dockerfile: ./local-ssl-proxy/Dockerfile
 
-  testing-ord:
-    image: "testing-ord:latest"
+  testing-ordinals-ord:
+    image: "testing-ordinals-ord:latest"
     build:
-      dockerfile: ./ord/Dockerfile
+      dockerfile: ./ordinals-ord/Dockerfile
     depends_on:
       bitcoind:
         condition: service_healthy
@@ -22,22 +22,20 @@ services:
       - "8000:8000"
       - "8001:8001"
 
-  testing-ordhook:
-    image: "testing-ordhook:latest"
+  testing-hirosystems-ordhook:
+    image: "testing-hirosystems-ordhook:latest"
     build:
-      dockerfile: ./ordhook/Dockerfile
+      dockerfile: ./hirosystems-ordhook/Dockerfile
     ports:
       - "20456:20456"
-    # volumes:
-    #   - ./Ordhook.toml:/Ordhook.toml
     depends_on:
-      testing-ordinals-api:
+      testing-hirosystems-ordinals-api:
         condition: service_started
 
-  testing-ordinals-api:
-    image: "testing-ordinals-api:latest"
+  testing-hirosystems-ordinals-api:
+    image: "testing-hirosystems-ordinals-api:latest"
     build:
-      dockerfile: ./ordinals-api/Dockerfile
+      dockerfile: ./hirosystems-ordinals-api/Dockerfile
     depends_on:
       bitcoind:
         condition: service_healthy
@@ -48,23 +46,22 @@ services:
       - "8005:8005"
       - "3099:3099"
 
-  testing-ordinals-explorer:
-    image: "testing-ordinals-explorer:latest"
+  testing-hirosystems-ordinals-explorer:
+    image: "testing-hirosystems-ordinals-explorer:latest"
     build:
-      dockerfile: ./ordinals-explorer/Dockerfile
-    # env_file:
-    #   - ./ordinals-explorer.env
+      dockerfile: ./hirosystems-ordinals-explorer/Dockerfile
     ports:
       - "8006:3001"
-    # volumes:
-    #   - ./ordinals-explorer.env:/usr/src/ordinals-explorer/.env.production
     depends_on:
-      testing-ordinals-api:
+      testing-hirosystems-ordinals-api:
         condition: service_started
 
-  ##
-  # The following services are used by the testing images
-  ##
+
+  #########################################################
+  # The following services are used by the testing images #
+  #########################################################
+
+
   bitcoind:
     container_name: bitcoind
     image: lncm/bitcoind:v26.0
@@ -75,7 +72,6 @@ services:
       - "28332:28332"
       - "28333:28333"
     volumes:
-      # - ./bitcoin-data:/data/.bitcoin
       - ./bitcoind/bitcoin.conf:/data/.bitcoin/bitcoin.conf
     healthcheck:
       test: ["CMD-SHELL", "nc -z 127.0.0.1 18443"]
@@ -83,16 +79,12 @@ services:
       timeout: 10s
       retries: 5
 
+
   postgres:
     container_name: postgres
     image: "postgres:15"
     ports:
       - "5432:5432"
-    # volumes:
-    #   - type: bind
-    #     source: ./db-data
-    #     target: /var/lib/postgresql/data
-    # user: "1000:1000"
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres

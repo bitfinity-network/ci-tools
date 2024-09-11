@@ -1,7 +1,7 @@
 FROM ubuntu:24.04
 
 WORKDIR /app
-COPY ordinals-api/ordinals-api.sh .
+COPY hirosystems-ordinals-api/ordinals-api.sh .
 COPY mkcert .
 RUN apt update && apt install -y curl
 RUN curl -sL https://deb.nodesource.com/setup_22.x | bash

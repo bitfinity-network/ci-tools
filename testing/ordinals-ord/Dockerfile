@@ -1,7 +1,7 @@
 FROM ubuntu:24.04
 
 WORKDIR /app
-COPY ord/ord.sh .
+COPY ordinals-ord/ord.sh .
 COPY mkcert .
 RUN apt update && apt install -y curl
 RUN curl -sL https://deb.nodesource.com/setup_22.x | bash

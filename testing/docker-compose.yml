@@ -1,0 +1,92 @@
+version: '3.3'
+
+#
+# This docker-compose file is used to start the services for local testing.
+#
+
+services:
+
+  testing-local-ssl-proxy:
+    image: "testing-local-ssl-proxy:latest"
+    build:
+      dockerfile: ./local-ssl-proxy/Dockerfile
+
+  testing-ordinals-ord:
+    image: "testing-ordinals-ord:latest"
+    build:
+      dockerfile: ./ordinals-ord/Dockerfile
+    depends_on:
+      bitcoind:
+        condition: service_healthy
+    ports:
+      - "8000:8000"
+      - "8001:8001"
+
+  testing-hirosystems-ordhook:
+    image: "testing-hirosystems-ordhook:latest"
+    build:
+      dockerfile: ./hirosystems-ordhook/Dockerfile
+    ports:
+      - "20456:20456"
+    depends_on:
+      testing-hirosystems-ordinals-api:
+        condition: service_started
+
+  testing-hirosystems-ordinals-api:
+    image: "testing-hirosystems-ordinals-api:latest"
+    build:
+      dockerfile: ./hirosystems-ordinals-api/Dockerfile
+    depends_on:
+      bitcoind:
+        condition: service_healthy
+      postgres:
+        condition: service_started
+    ports:
+      - "8004:3000"
+      - "8005:8005"
+      - "3099:3099"
+
+  testing-hirosystems-ordinals-explorer:
+    image: "testing-hirosystems-ordinals-explorer:latest"
+    build:
+      dockerfile: ./hirosystems-ordinals-explorer/Dockerfile
+    ports:
+      - "8006:3001"
+    depends_on:
+      testing-hirosystems-ordinals-api:
+        condition: service_started
+
+
+  #########################################################
+  # The following services are used by the testing images #
+  #########################################################
+
+
+  bitcoind:
+    container_name: bitcoind
+    image: lncm/bitcoind:v26.0
+    command: ["-txindex", "-debug=mempool", "-rpcport=18443"]
+    ports:
+      - "18443:18443"
+      - "18444:18444"
+      - "28332:28332"
+      - "28333:28333"
+    volumes:
+      - ./bitcoind/bitcoin.conf:/data/.bitcoin/bitcoin.conf
+    healthcheck:
+      test: ["CMD-SHELL", "nc -z 127.0.0.1 18443"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+
+
+  postgres:
+    container_name: postgres
+    image: "postgres:15"
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: postgres
+      POSTGRES_PORT: 5432

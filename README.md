@@ -46,5 +46,11 @@ In order to launch image with proxy launch DFX in background and then start ngin
 CMD (dfx start --background && nginx)
 ```
 
+## testing
+
+Images used for integration testing of Bitfinity projects.
+
+**WARN**: these images are not meant to be used in a production environment
+
 
 

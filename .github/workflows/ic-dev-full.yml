@@ -12,19 +12,21 @@ on:
       - main
     paths:
       - 'ic-dev-full/**'
+      - '.github/workflows/ic-dev-full.yml'
   pull_request:
     branches:
       - 'main'
     paths:
       - 'ic-dev-full/**'
+      - '.github/workflows/ic-dev-full.yml'
 
   workflow_run:
     workflows: [rust_dfx_base_image, ic_binaries]
     types: [completed]
     branches: [main]
 env:
-  BUILD_TAG: rust1.75-dfx0.15
-  BASE_IMAGE: ghcr.io/${{ github.repository_owner }}/ic-dev-base:rust1.75-dfx0.15
+  BUILD_TAG: rust1.77-dfx0.19
+  BASE_IMAGE: ghcr.io/${{ github.repository_owner }}/ic-dev-base:rust1.77-dfx0.19
   BIN_IMAGE: ghcr.io/${{ github.repository_owner }}/ic-bin:rc-2022-09-30
 
 jobs:

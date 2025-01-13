@@ -1,16 +1,10 @@
-version: '3.3'
+version: "3.3"
 
 #
 # This docker-compose file is used to start the services for local testing.
 #
 
 services:
-
-  testing-local-ssl-proxy:
-    image: "testing-local-ssl-proxy:latest"
-    build:
-      dockerfile: ./local-ssl-proxy/Dockerfile
-
   testing-ordinals-ord:
     image: "testing-ordinals-ord:latest"
     build:
@@ -20,7 +14,6 @@ services:
         condition: service_healthy
     ports:
       - "8000:8000"
-      - "8001:8001"
 
   testing-hirosystems-ordhook:
     image: "testing-hirosystems-ordhook:latest"
@@ -43,7 +36,6 @@ services:
         condition: service_started
     ports:
       - "8004:3000"
-      - "8005:8005"
       - "3099:3099"
 
   testing-hirosystems-ordinals-explorer:
@@ -56,11 +48,9 @@ services:
       testing-hirosystems-ordinals-api:
         condition: service_started
 
-
   #########################################################
   # The following services are used by the testing images #
   #########################################################
-
 
   bitcoind:
     container_name: bitcoind
@@ -78,7 +68,6 @@ services:
       interval: 30s
       timeout: 10s
       retries: 5
-
 
   postgres:
     container_name: postgres

@@ -1,7 +1,5 @@
 #!/usr/bin/env bash
 
-local-ssl-proxy --source 8005 --target 3000 --key localhost+3-key.pem --cert localhost+3.crt &
-
 cd /app/ordinals-api-regtest/
 # postgres params
 export PGHOST='postgres'

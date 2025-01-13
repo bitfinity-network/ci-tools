@@ -22,7 +22,7 @@ jobs:
   publish-testing-image:
     strategy:
       matrix:
-        image: ["hirosystems-ordhook", "hirosystems-ordinals-api", "hirosystems-ordinals-explorer", "local-ssl-proxy", "ordinals-ord"]
+        image: ["hirosystems-ordhook", "hirosystems-ordinals-api", "hirosystems-ordinals-explorer", "ordinals-ord"]
 
     runs-on: ubuntu-latest
 
